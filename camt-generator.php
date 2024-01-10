@@ -11,16 +11,6 @@ if (isset($argv[1])) {
     exit(1);
 }
 
-function generateRandomName() {
-    $firstNames = ['John', 'Alice', 'Bob', 'Emma', 'Michael', 'Olivia'];
-    $lastNames = ['Smith', 'Johnson', 'Doe', 'Brown', 'Wilson', 'Lee'];
-
-    $randomFirstName = $firstNames[array_rand($firstNames)];
-    $randomLastName = $lastNames[array_rand($lastNames)];
-
-    return $randomFirstName . ' ' . $randomLastName;
-}
-
 // Load the configuration from the YAML file
 $configFile = 'config/config.yml'; // Path to the configuration YAML file
 $config = Yaml::parseFile($configFile);
