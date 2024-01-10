@@ -13,13 +13,11 @@ Before running the script, make sure you have PHP installed on your system. You'
 1. Clone this repository to your local machine:
 
    ```bash
-   git clone https://github.com/jens-chorus/camt-generator.git
-2. Navigate to the project directory:
-  ```cd camt-generator```
-
-3. Create a config directory and place your config.yml file inside it. You can use the provided config.example.yml as a template.
-
-4. Place your pain.008 file in the input directory.
+   git clone https://github.com/jens-chorus/camt-generator.git```
+2. Navigate to the project directory: ```cd camt-generator```
+3. Run ```composer install```
+4. Adapt the provided config.yml to your needs. 
+5. Place your pain.008 file in the input directory.
 
 ## Usage
 Run the script with the following command:
@@ -39,3 +37,7 @@ You can customize the script by editing the config.yml file. The following confi
 - xmlns_xsi: The XML namespace for xsi (XML Schema Instance).
 - xsi_schemaLocation: The xsi schema location.
 - ... check the provided config.yml for available options
+
+
+## Acknowledgments
+- ISO 20022 Standard: https://www.iso20022.org/
