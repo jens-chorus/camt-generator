@@ -1,6 +1,9 @@
 # CAMT.054 XML Generator
 
-This PHP script generates a CAMT.054 XML file based on input data from a `pain.008` file and uses configuration settings from a `config.yml` file. The generated XML file follows the ISO 20022 standard for financial messaging.
+This PHP script generates a CAMT.054 XML file based on input data from a `pain.008` file and uses configuration settings from a `config.yml` file. The generated XML file follows the ISO 20022 standard for financial messaging. 
+
+**Disclaimer**: This script is intended for testing and demonstration purposes only. No support is provided for production use, and it should not be used in live financial systems.
+
 
 ## Getting Started
 
