@@ -1,0 +1,17 @@
+document:
+  xmlns: 'urn:iso:std:iso:20022:tech:xsd:camt.054.001.02'
+  xmlns_xsi: 'http://www.w3.org/2001/XMLSchema-instance'
+  xsi_schemaLocation: 'urn:iso:std:iso:20022:tech:xsd:camt.054.001.02 camt.054.001.02.xsd'
+
+acct:
+  iban: 'DE52430609677023575300'
+  ccy: 'EUR'
+  ownr:
+    nm: 'My NPO eV'
+  svcr:
+    fin_instn_id:
+      bic: 'GENODEM1GLS'
+      nm: 'GLS Gemeinschaftsbank eG'
+      othr:
+        id: 'DE 12349987'
+        issr: 'UmsStId'
