@@ -330,6 +330,11 @@ $ntry->appendChild($ntryDtls);
 // Save the XML to a file in the output directory
 $outputDirectory = './output/'; // Replace with your output directory path
 
+// Check if the output directory exists, and create it if not
+if (!is_dir($outputDirectory)) {
+    mkdir($outputDirectory, 0777, true);
+}
+
 $outputFileName = pathinfo($inputFileName, PATHINFO_FILENAME) . '-camt-054.xml';
 $outputFilePath = $outputDirectory . $outputFileName;
 
