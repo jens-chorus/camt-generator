@@ -114,7 +114,7 @@ $ownrNm = $doc->createElement('Nm', $acctOwnrNm);
 $ownr->appendChild($ownrNm);
 
 // Create the <Svcr> element for the service provider
-$svcr = $doc->createElement($acctSvcrOthrIssr);
+$svcr = $doc->createElement('Svcr');
 $acct->appendChild($svcr);
 
 // Create the <FinInstnId> element for the service provider
@@ -325,7 +325,7 @@ if (!is_dir($outputDirectory)) {
     mkdir($outputDirectory, 0777, true);
 }
 
-$outputFileName = pathinfo($inputFileName, PATHINFO_FILENAME) . '-camt-054.xml';
+$outputFileName = pathinfo($inputFileName, PATHINFO_FILENAME) . 'sepadd-camt054.xml';
 $outputFilePath = $outputDirectory . $outputFileName;
 
 // Save the XML to the output file
