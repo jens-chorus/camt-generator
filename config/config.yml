@@ -8,6 +8,7 @@ acct:
   ccy: 'EUR'
   ownr:
     nm: 'My NPO eV'
+  credttm: '2023-12-31T13:21:00'
   svcr:
     fin_instn_id:
       bic: 'GENODEM1GLS'
