@@ -5,7 +5,7 @@ document:
 
 acct:
   iban: 'DE52430609677023575300'
-  ccy: 'EUR'
+  ccy: 'CHF'
   ownr:
     nm: 'My NPO eV'
   credttm: '2023-12-31T13:21:00'

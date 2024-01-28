@@ -584,7 +584,7 @@ if (!is_dir($outputDirectory)) {
     mkdir($outputDirectory, 0777, true);
 }
 
-$outputFileName = pathinfo($inputFileName, PATHINFO_FILENAME) . $inputSourceType . '-camt054.xml';
+$outputFileName = pathinfo($inputFileName, PATHINFO_FILENAME) . "-inputType-" . $inputSourceType . '-outputType-camt054.xml';
 $outputFilePath = $outputDirectory . $outputFileName;
 
 // Save the XML to the output file

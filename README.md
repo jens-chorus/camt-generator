@@ -16,7 +16,7 @@ Before running the script, make sure you have PHP installed on your system. You'
 1. Clone this repository to your local machine:
 
    ```bash
-   git clone https://github.com/jens-chorus/camt-generator.git```
+   git clone https://github.com/jens-chorus/camt-generator.git
 2. Navigate to the project directory: ```cd camt-generator```
 3. Run ```composer install```
 4. Adapt the provided config.yml to your needs. 
@@ -25,9 +25,11 @@ Before running the script, make sure you have PHP installed on your system. You'
 ## Usage
 Run the script with the following command:
 
-```php camt-generator.php path/to/input/pain.008```
+```php camt-generator.php path/to/input/input.file pain.008|reference-collection```
 
 Replace path/to/input/pain.008 with the actual path to your pain.008 file.
+- pain.008 : You must provide a pain.008 file 
+- rererence-collection: You must provide a .csv with the headers ```reference,amount```
 
 The script will generate a CAMT.054 XML file and save it in the output directory using the name provided from the input file.
 
