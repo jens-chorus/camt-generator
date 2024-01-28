@@ -67,8 +67,8 @@ class Pain008Processor
             $domn = $doc->createElement('Domn');
             $cd = $doc->createElement('Cd', 'PMNT');
             $fmly = $doc->createElement('Fmly');
-            $fmlyCd = $doc->createElement('Cd', 'IDDT');
-            $subFmlyCd = $doc->createElement('SubFmlyCd', 'PMDD');
+            $fmlyCd = $doc->createElement('Cd', $this->config['BkTxCd']['Domn']['Fmly']['Cd']);
+            $subFmlyCd = $doc->createElement('SubFmlyCd', $this->config['BkTxCd']['Domn']['Fmly']['SubFmlyCd']);
             $fmly->appendChild($fmlyCd);
             $fmly->appendChild($subFmlyCd);
             $domn->appendChild($cd);

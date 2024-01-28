@@ -16,3 +16,9 @@ acct:
       othr:
         id: 'DE 12349987'
         issr: 'UmsStId'
+BkTxCd:
+  Domn:
+    Cd: 'PMNT'
+    Fmly:
+      Cd: 'IDDT'
+      SubFmlyCd: 'PMDD'
