@@ -251,12 +251,21 @@ if ($inputSourceType === 'pain.008') {
         $amtValue = '30.00 EUR'; // Replace with your desired value
         list($txAmount, $txCurrency) = sscanf($amtValue, '%f %s');
         $txAmtAmt = $doc->createElement('Amt', $txAmount);
+        //$txAmtAmt->setAttribute('Ccy', $txCurrency);
+        //$txAmt->appendChild($txAmtAmt);
+        //$amtDtls->appendChild($txAmt);
+
+        // Create the <TxAmt> element and set its value with Ccy attribute
+        $txAmt = $doc->createElement('TxAmt');
+        $txAmtAmt = $doc->createElement('Amt', $txAmount);
         $txAmtAmt->setAttribute('Ccy', $txCurrency);
-        $txAmt->appendChild($txAmtAmt);
-        $amtDtls->appendChild($txAmt);
 
         // Append the AmtDtls element to TxDtls
-        $txDtls->appendChild($amtDtls);
+        $txDtls->appendChild($txAmtAmt);
+
+        // Append CdtDbtInd element
+        $txCdtDbtInd = $doc->createElement('CdtDbtInd','CRDT');
+        $txDtls->appendChild($txCdtDbtInd);
 
         // Add the specified elements as a template
         $bkTxCd = $doc->createElement('BkTxCd');
@@ -311,7 +320,7 @@ if ($inputSourceType === 'pain.008') {
         $rltdAgts = $doc->createElement('RltdAgts');
         $dbtrAgt = $doc->createElement('DbtrAgt');
         $finInstnId = $doc->createElement('FinInstnId');
-        $bic = $doc->createElement('BIC', 'INGDDEFFXXX'); // Replace with the actual BIC
+        $bic = $doc->createElement('BICFI', 'INGDDEFFXXX'); // Replace with the actual BIC
         $finInstnId->appendChild($bic);
         $dbtrAgt->appendChild($finInstnId);
         $rltdAgts->appendChild($dbtrAgt);
