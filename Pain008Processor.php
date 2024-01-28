@@ -28,7 +28,13 @@ class Pain008Processor
             $endToEndId = $drctDbtTxInf->getElementsByTagName('EndToEndId')->item(0)->textContent;
             $instdAmtElement = $drctDbtTxInf->getElementsByTagName('InstdAmt')->item(0);
             $txInstdAmt = $instdAmtElement->textContent;
-            $txCurrency = $instdAmtElement->getAttribute('Ccy');
+            // Check if the 'Ccy' attribute exists before trying to access it
+            if ($instdAmtElement->hasAttribute('Ccy')) {
+                $txCurrency = $instdAmtElement->getAttribute('Ccy');
+            } else {
+                echo "Cannot determine currency from instdAmtElement. Falling back to account currency";
+                $txCurrency = $this->config['acct']['ccy'];
+            }
 
             // Create the <Refs> element and set its values
             $refs = $doc->createElement('Refs');
@@ -44,14 +50,12 @@ class Pain008Processor
             $refs->appendChild($endToEndIdElement);
             $txDtls->appendChild($refs);
 
+            $txAmtAmt = $doc->createElement('Amt', $txInstdAmt);
+            $txAmtAmt->setAttribute('Ccy', $txCurrency);
 
-            // Create the <TxAmt> element and set its value with Ccy attribute
-            list($txAmount, $txCurrency) = sscanf($txInstdAmt, '%f %s');
-            $txAmt = $doc->createElement('Amt', $txInstdAmt);
-            $txAmt->setAttribute('Ccy', 'CHF');
 
             // Append the AmtDtls element to TxDtls
-            $txDtls->appendChild($txAmt);
+            $txDtls->appendChild($txAmtAmt);
 
             // Append CdtDbtInd element
             $txCdtDbtInd = $doc->createElement('CdtDbtInd', 'CRDT');
@@ -135,7 +139,7 @@ class Pain008Processor
             $ntryDtls->appendChild($txDtls);
 
             // Calculate and accumulate the transaction amount
-            $totalAmount += $txAmount;
+            $totalAmount += $txInstdAmt;
         }
         $amt = $doc->createElement('Amt', number_format($totalAmount, 2, '.', ''));
         $amt->setAttribute('Ccy', 'EUR');

@@ -27,6 +27,7 @@ class ReferenceCollectionProcessor {
                     // Access data using column indices or associative array
                     $reference = $row[array_search('reference', $header)];
                     $amount = $row[array_search('amount', $header)];
+                    $currency = $row[array_search('currency', $header)];
                     #name = generateDummyName();
                     $txDtls = $doc->createElement('TxDtls');
 
@@ -41,9 +42,8 @@ class ReferenceCollectionProcessor {
                     $ref = $doc->createElement('Ref', '99999');
 
                     // Create the <TxAmt> element and set its value with Ccy attribute
-                    $txAmt = $doc->createElement('TxAmt');
                     $txAmtAmt = $doc->createElement('Amt', $amount);
-                    $txAmtAmt->setAttribute('Ccy', 'CHF');
+                    $txAmtAmt->setAttribute('Ccy', $currency);
 
                     // Create the <CdtDbtInd> element and set its value
                     $txCdtDbtInd = $doc->createElement('CdtDbtInd','CRDT');
@@ -176,7 +176,7 @@ class ReferenceCollectionProcessor {
         }
 
         $amt = $doc->createElement('Amt', number_format($totalAmount, 2, '.', ''));
-        $amt->setAttribute('Ccy', 'EUR');
+        $amt->setAttribute('Ccy', $this->config['acct']['ccy']);
         $ntry->appendChild($amt);
 
         $ntry->appendChild($doc->createElement('CdtDbtInd', 'CRDT'));
