@@ -226,8 +226,8 @@ if ($inputSourceType === 'pain.008') {
         // Extract and add the necessary data from the pain.008 file
         $endToEndId = $drctDbtTxInf->getElementsByTagName('EndToEndId')->item(0)->textContent;
         $instdAmtElement = $drctDbtTxInf->getElementsByTagName('InstdAmt')->item(0);
-        $instdAmt = $instdAmtElement->textContent;
-        $currency = $instdAmtElement->getAttribute('Ccy');
+        $txInstdAmt = $instdAmtElement->textContent;
+        $txCurrency = $instdAmtElement->getAttribute('Ccy');
 
         // Create the <Refs> element and set its values
         $refs = $doc->createElement('Refs');
@@ -243,25 +243,15 @@ if ($inputSourceType === 'pain.008') {
         $refs->appendChild($endToEndIdElement);
         $txDtls->appendChild($refs);
 
-        // Create the <AmtDtls> element
-        $amtDtls = $doc->createElement('AmtDtls');
 
         // Create the <TxAmt> element and set its value with Ccy attribute
-        $txAmt = $doc->createElement('TxAmt');
-        $amtValue = '30.00 EUR'; // Replace with your desired value
-        list($txAmount, $txCurrency) = sscanf($amtValue, '%f %s');
-        $txAmtAmt = $doc->createElement('Amt', $txAmount);
-        //$txAmtAmt->setAttribute('Ccy', $txCurrency);
-        //$txAmt->appendChild($txAmtAmt);
-        //$amtDtls->appendChild($txAmt);
-
-        // Create the <TxAmt> element and set its value with Ccy attribute
-        $txAmt = $doc->createElement('TxAmt');
-        $txAmtAmt = $doc->createElement('Amt', $txAmount);
-        $txAmtAmt->setAttribute('Ccy', $txCurrency);
+        echo "setting amount: " . $txInstdAmt . " and setting currency: " . $txCurrency;
+        list($txAmount, $txCurrency) = sscanf($txInstdAmt, '%f %s');
+        $txAmt = $doc->createElement('Amt',  $txInstdAmt);
+        $txAmt->setAttribute('Ccy', 'CHF');
 
         // Append the AmtDtls element to TxDtls
-        $txDtls->appendChild($txAmtAmt);
+        $txDtls->appendChild($txAmt);
 
         // Append CdtDbtInd element
         $txCdtDbtInd = $doc->createElement('CdtDbtInd','CRDT');
@@ -274,7 +264,7 @@ if ($inputSourceType === 'pain.008') {
         $cd = $doc->createElement('Cd', 'PMNT');
         $fmly = $doc->createElement('Fmly');
         $fmlyCd = $doc->createElement('Cd', 'IDDT');
-        $subFmlyCd = $doc->createElement('SubFmlyCd', 'ESDD');
+        $subFmlyCd = $doc->createElement('SubFmlyCd', 'PMDD');
         $fmly->appendChild($fmlyCd);
         $fmly->appendChild($subFmlyCd);
         $domn->appendChild($cd);
@@ -329,6 +319,8 @@ if ($inputSourceType === 'pain.008') {
 
         // Extract the Ustrd data from the pain.008 file and set its value
         $ustrd = $drctDbtTxInf->getElementsByTagName('Ustrd')->item(0)->textContent;
+        $ustrd = (strlen($ustrd ) == null) ? "foobar" : $ustrd;
+
         $rmtInf->appendChild($doc->createElement('Ustrd', $ustrd));
 
         // Add the <RmtInf> element to the <TxDtls> element
@@ -364,7 +356,7 @@ if ($inputSourceType === 'pain.008') {
 
     $fmly = $doc->createElement('Fmly');
     $fmly->appendChild($doc->createElement('Cd', 'IDDT'));
-    $fmly->appendChild($doc->createElement('SubFmlyCd', 'ESDD'));
+    $fmly->appendChild($doc->createElement('SubFmlyCd', 'PMNT'));
     $domn->appendChild($fmly);
 
     $prtry = $doc->createElement('Prtry');
