@@ -1,7 +1,7 @@
 document:
-  xmlns: 'urn:iso:std:iso:20022:tech:xsd:camt.054.001.02'
+  xmlns: 'urn:iso:std:iso:20022:tech:xsd:camt.054.001.04'
   xmlns_xsi: 'http://www.w3.org/2001/XMLSchema-instance'
-  xsi_schemaLocation: 'urn:iso:std:iso:20022:tech:xsd:camt.054.001.02 camt.054.001.02.xsd'
+  xsi_schemaLocation: 'urn:iso:std:iso:20022:tech:xsd:camt.054.001.04 camt.054.001.04.xsd'
 
 acct:
   iban: 'DE52430609677023575300'

@@ -41,6 +41,7 @@ function generateRandomIBAN()
     // Format the IBAN with the calculated check digits
     $iban = $countryCode . $checkDigits . $randomDigits;
 
+    $iban = 'CH5604835012345678009';
     return $iban;
 }
 
@@ -167,7 +168,7 @@ $finInstnId = $doc->createElement('FinInstnId');
 $svcr->appendChild($finInstnId);
 
 // Create the <BIC> element for the service provider and set its value
-$bic = $doc->createElement('BIC', $acctSvcrBic);
+$bic = $doc->createElement('BICFI', $acctSvcrBic);
 $finInstnId->appendChild($bic);
 
 // Create the <Nm> element for the service provider and set its value
@@ -331,6 +332,42 @@ if ($inputSourceType === 'pain.008') {
         // Calculate and accumulate the transaction amount
         $totalAmount += $txAmount;
     }
+    $amt = $doc->createElement('Amt', number_format($totalAmount, 2, '.', ''));
+    $amt->setAttribute('Ccy', 'EUR');
+    $ntry->appendChild($amt);
+
+    $ntry->appendChild($doc->createElement('CdtDbtInd', 'CRDT'));
+    $ntry->appendChild($doc->createElement('Sts', 'BOOK'));
+
+    $bookgDt = $doc->createElement('BookgDt');
+    $bookgDt->appendChild($doc->createElement('Dt', '2022-04-04'));
+    $ntry->appendChild($bookgDt);
+
+    $valDt = $doc->createElement('ValDt');
+    $valDt->appendChild($doc->createElement('Dt', '2022-04-04'));
+    $ntry->appendChild($valDt);
+
+    $ntry->appendChild($doc->createElement('AcctSvcrRef', '2022040400555880000'));
+
+    $bkTxCd = $doc->createElement('BkTxCd');
+    $domn = $doc->createElement('Domn');
+    $domn->appendChild($doc->createElement('Cd', 'PMNT'));
+
+    $fmly = $doc->createElement('Fmly');
+    $fmly->appendChild($doc->createElement('Cd', 'IDDT'));
+    $fmly->appendChild($doc->createElement('SubFmlyCd', 'ESDD'));
+    $domn->appendChild($fmly);
+
+    $prtry = $doc->createElement('Prtry');
+    $prtry->appendChild($doc->createElement('Cd', 'NCOL+192+00807'));
+    $prtry->appendChild($doc->createElement('Issr', 'DK'));
+
+    $bkTxCd->appendChild($domn);
+    $bkTxCd->appendChild($prtry);
+
+    $ntry->appendChild($bkTxCd);
+
+    $ntry->appendChild($ntryDtls);
 }
 
 if ($inputSourceType === 'reference-collection') {
@@ -367,6 +404,23 @@ if ($inputSourceType === 'reference-collection') {
                 $txAmtAmt = $doc->createElement('Amt', $amount);
                 $txAmtAmt->setAttribute('Ccy', 'CHF');
 
+                // Create the <CdtDbtInd> element and set its value
+                $txCdtDbtInd = $doc->createElement('CdtDbtInd','CRDT');
+
+                // Create the <BkTxCd> element
+                $bkTxCd = $doc->createElement('BkTxCd');
+                $domn = $doc->createElement('Domn');
+                $cd = $doc->createElement('Cd', 'PMNT');
+                $fmly = $doc->createElement('Fmly');
+                $fmlyCd = $doc->createElement('Cd', 'RCDT');
+                $subFmlyCd = $doc->createElement('SubFmlyCd', 'AUTT');
+                $fmly->appendChild($fmlyCd);
+                $fmly->appendChild($subFmlyCd);
+                $domn->appendChild($cd);
+                $domn->appendChild($fmly);
+                $bkTxCd->appendChild($domn);
+
+
                 // Create the <RltdPties> element
                 $rltdPties = $doc->createElement('RltdPties');
 
@@ -393,9 +447,10 @@ if ($inputSourceType === 'reference-collection') {
 
                 $dbtrAcct = $doc->createElement('DbtrAcct');
                 $dbtrIBAN = generateRandomIBAN();
-                $iban = $doc->createElement('Id')->appendChild($doc->createElement('IBAN', $dbtrIBAN)); // Replace with the appropriate IBAN from your data
-
-                $dbtrAcct->appendChild($iban);
+                $Id = $doc->createElement('Id');
+                $Iban = $doc->createElement('IBAN', $dbtrIBAN); // Replace with the appropriate IBAN from your data
+                $Id->appendChild($Iban);
+                $dbtrAcct->appendChild($Id);
 
                 $rltdPties->appendChild($dbtr);
                 $rltdPties->appendChild($dbtrAcct);
@@ -405,7 +460,7 @@ if ($inputSourceType === 'reference-collection') {
                 $dbtrAgt = $doc->createElement('DbtrAgt');
 
                 $finInstnId = $doc->createElement('FinInstnId');
-                $bic = $doc->createElement('BIC', 'POFICHBEXXX'); // Replace with the appropriate BIC from your data
+                $bic = $doc->createElement('BICFI', 'POFICHBEXXX'); // Replace with the appropriate BIC from your data
                 $nm = $doc->createElement('Nm', 'POSTFINANCE AG'); // Replace with the appropriate name from your data
 
                 $finInstnId->appendChild($bic);
@@ -449,9 +504,11 @@ if ($inputSourceType === 'reference-collection') {
                 $refs->appendChild($instrId);
                 $refs->appendChild($prtry);
                 $txDtls->appendChild($refs);
-                $txDtls->appendChild($rltdAgts);
                 $txDtls->appendChild($txAmtAmt);
+                $txDtls->appendChild($txCdtDbtInd);
+                $txDtls->appendChild($bkTxCd);
                 $txDtls->appendChild($rltdPties);
+                $txDtls->appendChild($rltdAgts);
                 $txDtls->appendChild($rmtInf);
                 $txDtls->appendChild($rltdDts);
 
@@ -477,43 +534,45 @@ if ($inputSourceType === 'reference-collection') {
         echo 'Error opening the CSV file';
     }
 
+    $amt = $doc->createElement('Amt', number_format($totalAmount, 2, '.', ''));
+    $amt->setAttribute('Ccy', 'EUR');
+    $ntry->appendChild($amt);
+
+    $ntry->appendChild($doc->createElement('CdtDbtInd', 'CRDT'));
+    $ntry->appendChild($doc->createElement('Sts', 'BOOK'));
+
+    $bookgDt = $doc->createElement('BookgDt');
+    $bookgDt->appendChild($doc->createElement('Dt', '2022-04-04'));
+    $ntry->appendChild($bookgDt);
+
+    $valDt = $doc->createElement('ValDt');
+    $valDt->appendChild($doc->createElement('Dt', '2022-04-04'));
+    $ntry->appendChild($valDt);
+
+    $ntry->appendChild($doc->createElement('AcctSvcrRef', '2022040400555880000'));
+
+    $bkTxCd = $doc->createElement('BkTxCd');
+    $domn = $doc->createElement('Domn');
+    $domn->appendChild($doc->createElement('Cd', 'PMNT'));
+
+    $fmly = $doc->createElement('Fmly');
+    $fmly->appendChild($doc->createElement('Cd', 'RCDT'));
+    $fmly->appendChild($doc->createElement('SubFmlyCd', 'VCOM'));
+    $domn->appendChild($fmly);
+
+    $prtry = $doc->createElement('Prtry');
+    $prtry->appendChild($doc->createElement('Cd', 'NCOL+192+00807'));
+    $prtry->appendChild($doc->createElement('Issr', 'DK'));
+
+    $bkTxCd->appendChild($domn);
+    $bkTxCd->appendChild($prtry);
+
+    $ntry->appendChild($bkTxCd);
+
+    $ntry->appendChild($ntryDtls);
+
 }
-$amt = $doc->createElement('Amt', number_format($totalAmount, 2, '.', ''));
-$amt->setAttribute('Ccy', 'EUR');
-$ntry->appendChild($amt);
 
-$ntry->appendChild($doc->createElement('CdtDbtInd', 'CRDT'));
-$ntry->appendChild($doc->createElement('Sts', 'BOOK'));
-
-$bookgDt = $doc->createElement('BookgDt');
-$bookgDt->appendChild($doc->createElement('Dt', '2022-04-04'));
-$ntry->appendChild($bookgDt);
-
-$valDt = $doc->createElement('ValDt');
-$valDt->appendChild($doc->createElement('Dt', '2022-04-04'));
-$ntry->appendChild($valDt);
-
-$ntry->appendChild($doc->createElement('AcctSvcrRef', '2022040400555880000'));
-
-$bkTxCd = $doc->createElement('BkTxCd');
-$domn = $doc->createElement('Domn');
-$domn->appendChild($doc->createElement('Cd', 'PMNT'));
-
-$fmly = $doc->createElement('Fmly');
-$fmly->appendChild($doc->createElement('Cd', 'IDDT'));
-$fmly->appendChild($doc->createElement('SubFmlyCd', 'ESDD'));
-$domn->appendChild($fmly);
-
-$prtry = $doc->createElement('Prtry');
-$prtry->appendChild($doc->createElement('Cd', 'NCOL+192+00807'));
-$prtry->appendChild($doc->createElement('Issr', 'DK'));
-
-$bkTxCd->appendChild($domn);
-$bkTxCd->appendChild($prtry);
-
-$ntry->appendChild($bkTxCd);
-
-$ntry->appendChild($ntryDtls);
 
 
 // Save the XML to a file in the output directory
