@@ -142,7 +142,7 @@ class Pain008Processor
             $totalAmount += $txInstdAmt;
         }
         $amt = $doc->createElement('Amt', number_format($totalAmount, 2, '.', ''));
-        $amt->setAttribute('Ccy', 'EUR');
+        $amt->setAttribute('Ccy', $txCurrency);
         $ntry->appendChild($amt);
 
         $ntry->appendChild($doc->createElement('CdtDbtInd', 'CRDT'));
